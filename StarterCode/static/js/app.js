@@ -68,3 +68,12 @@
     });
 // };
 
+    var select = d3.select('#selDataset');
+
+    d3.json("samples.json").then(data => {
+        data.names.forEach(name => {
+            select.append("option").text(name).property("value");
+        });
+    });
+
+
