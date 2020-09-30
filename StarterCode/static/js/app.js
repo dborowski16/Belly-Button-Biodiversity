@@ -9,8 +9,10 @@ function panel(id) {
 
         var panelData = d3.select('#sample-metadata');
 
-        Object.entries(filtSamp).forEach((key) => {
-            panelData.append("h5").text(key[0].toUpperCase() + ": " + key[1] + "\n");
+        panelData.html("");
+
+        Object.entries(filtSamp).forEach(function([key, value]) {
+            panelData.append("h4").text(`${key}: ${value}`);
         });
     });
 }
@@ -23,25 +25,25 @@ function plots(id) {
         var data = sampleData.samples;
         console.log(data);
 
-        var filtSamp = data.filter(sample => sample.id === id);
+        var filtSamp = data.filter(sample => sample.id === id)[0];
         console.log(filtSamp);
            
-            var ids = filtSamp[0].otu_ids;
+            var ids = filtSamp.otu_ids;
             console.log(ids)
 
-            var values = filtSamp[0].sample_values;
+            var values = filtSamp.sample_values;
             console.log(values)
 
-            var labels = filtSamp[0].otu_labels;
+            var labels = filtSamp.otu_labels;
             console.log(labels)
 
-            var otuTop10 = filtSamp[0].sample_values.slice(0,10).reverse();
+            var otuTop10 = filtSamp.sample_values.slice(0,10).reverse();
             console.log(otuTop10)
 
-            var idTop10 = (filtSamp[0].otu_ids.slice(0,10)).map(d => "OTU " + d);
+            var idTop10 = (filtSamp.otu_ids.slice(0,10)).map(d => "OTU " + d);
             console.log(idTop10)
 
-            var nameTop10 = filtSamp[0].otu_labels.slice(0,10);
+            var nameTop10 = filtSamp.otu_labels.slice(0,10);
             console.log(nameTop10)
 
                 var trace1 = {
