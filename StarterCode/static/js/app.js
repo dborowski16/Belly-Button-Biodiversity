@@ -3,7 +3,7 @@
 // // Assign the value of the dropdown menu option to a variable
 // // var dataset = dropdownMenu.node().value;
 // var dataset = dropdownMenu.selectAll('names').data(samples);
-// function getPlots(id) {
+function plots(id) {
 
     d3.json("samples.json").then(sampleData => {
         console.log(sampleData)
@@ -66,14 +66,32 @@
             Plotly.newPlot("bubble", data2, layout2);
 
     });
-// };
+};
 
-    var select = d3.select('#selDataset');
+function init() {
+
+var select = d3.select('#selDataset');
 
     d3.json("samples.json").then(data => {
         data.names.forEach(name => {
             select.append("option").text(name).property("value");
         });
+
+        plots(data.names[0]);
+
+    d3.select('#selDataset').on('change', updatePlotly);
+
+    function updatePlotly() {
+        // Use D3 to select the dropdown menu
+        var dropdownMenu = d3.select("#selDataset");
+        // Assign the value of the dropdown menu option to a variable
+        var id = dropdownMenu.property("value");
+
+        plots(id);
+    };
     });
+};
+
+init();
 
 
