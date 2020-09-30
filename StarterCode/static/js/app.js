@@ -84,6 +84,37 @@ function plots(id) {
                 };
 
                 Plotly.newPlot("bubble", data2, layout2);
+
+                d3.json("samples.json").then(sampleData => {
+        
+                    var metaData = sampleData.metadata;
+                    console.log(metaData);
+            
+                    var filtSamp = metaData.filter(sample => sample.id.toString() === id)[0];
+                    console.log(filtSamp);
+
+                    var wash = filtSamp.wfreq;
+                    console.log(wash);
+
+                    var data3 = [
+                        {
+                          domain: { x: [0, 1], y: [0, 1] },
+                          value: wash,
+                          title: { text: "Wash Frequency per Week" },
+                          type: "indicator",
+                          mode: "gauge+number",
+                          gauge: {
+                            axis: { range: [null, 10] },
+                            steps: [
+                              { range: [0, 1], color: "rgb" }
+                            ],
+                          }
+                        }
+                      ];
+                      
+                      var layout3 = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+                      Plotly.newPlot('gauge', data3, layout3);
+                });
     });
 };
 
