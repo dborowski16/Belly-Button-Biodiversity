@@ -1,5 +1,17 @@
+function panel(id) {
+    d3.json("samples.json").then(sampleData => {
+        
+        var metaData = sampleData.metadata;
+        console.log(metaData);
+
+        var filtSamp = metaData.filter(sample => sample.id.toString() === id);
+        console.log(filtSamp);
+
+    });
+}
+
 function plots(id) {
-    console.log(id);
+
     d3.json("samples.json").then(sampleData => {
         console.log(sampleData)
         
@@ -9,7 +21,6 @@ function plots(id) {
         var filtSamp = data.filter(sample => sample.id === id);
         console.log(filtSamp);
            
-
             var ids = filtSamp[0].otu_ids;
             console.log(ids)
 
@@ -66,7 +77,6 @@ function plots(id) {
                 };
 
                 Plotly.newPlot("bubble", data2, layout2);
-        // }
     });
 };
 
@@ -80,10 +90,11 @@ var select = d3.select('#selDataset');
         });
 
         plots(data.names[0]);
-
-    d3.select('#selDataset').on('change', updatePlotly);
+        panel(data.names[0]);
     });
 };
+
+d3.select('#selDataset').on('change', updatePlotly);
 
 function updatePlotly() {
     // Use D3 to select the dropdown menu
@@ -92,6 +103,7 @@ function updatePlotly() {
     var id = dropdownMenu.property("value");
 
     plots(id);
+    panel(id);
 };
 
 init();
