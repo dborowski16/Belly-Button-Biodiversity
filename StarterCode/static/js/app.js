@@ -121,7 +121,7 @@ function plots(id) {
                         }
                       ];
                       
-                      var layout3 = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+                      var layout3 = { width: 450, height: 350, margin: { t: 0, b: 0 } };
                       Plotly.newPlot('gauge', data3, layout3);
                 });
     });
