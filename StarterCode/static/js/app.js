@@ -4,9 +4,14 @@ function panel(id) {
         var metaData = sampleData.metadata;
         console.log(metaData);
 
-        var filtSamp = metaData.filter(sample => sample.id.toString() === id);
+        var filtSamp = metaData.filter(sample => sample.id.toString() === id)[0];
         console.log(filtSamp);
 
+        var panelData = d3.select('#sample-metadata');
+
+        Object.entries(filtSamp).forEach((key) => {
+            panelData.append("h5").text(key[0].toUpperCase() + ": " + key[1] + "\n");
+        });
     });
 }
 
