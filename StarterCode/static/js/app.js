@@ -2,25 +2,30 @@ function plots(id) {
     console.log(id);
     d3.json("samples.json").then(sampleData => {
         console.log(sampleData)
-        var data = sampleData.samples[0];
-        console.log(data);           
+        
+        var data = sampleData.samples;
+        console.log(data);
 
-            var ids = data.otu_ids;
+        var filtSamp = data.filter(sample => sample.id === id);
+        console.log(filtSamp);
+           
+
+            var ids = filtSamp[0].otu_ids;
             console.log(ids)
 
-            var values = sampleData.samples[1].sample_values;
+            var values = filtSamp[0].sample_values;
             console.log(values)
 
-            var labels = sampleData.samples[1].otu_labels;
+            var labels = filtSamp[0].otu_labels;
             console.log(labels)
 
-            var otuTop10 = sampleData.samples[1].sample_values.slice(0,10).reverse();
+            var otuTop10 = filtSamp[0].sample_values.slice(0,10).reverse();
             console.log(otuTop10)
 
-            var idTop10 = (sampleData.samples[1].otu_ids.slice(0,10)).map(d => "OTU " + d);
+            var idTop10 = (filtSamp[0].otu_ids.slice(0,10)).map(d => "OTU " + d);
             console.log(idTop10)
 
-            var nameTop10 = sampleData.samples[1].otu_labels.slice(0,10);
+            var nameTop10 = filtSamp[0].otu_labels.slice(0,10);
             console.log(nameTop10)
 
                 var trace1 = {
@@ -87,7 +92,6 @@ function updatePlotly() {
     var id = dropdownMenu.property("value");
 
     plots(id);
-    console.log(id);
 };
 
 init();
