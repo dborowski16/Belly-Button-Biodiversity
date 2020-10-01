@@ -1,22 +1,28 @@
+// Create a function to populate the panel with metadata
 function panel(id) {
     d3.json("samples.json").then(sampleData => {
         
         var metaData = sampleData.metadata;
         console.log(metaData);
 
+        // Filter the data by selected sample id
         var filtSamp = metaData.filter(sample => sample.id.toString() === id)[0];
         console.log(filtSamp);
 
+        // Select the panel in the html
         var panelData = d3.select('#sample-metadata');
 
+        // Clear the panel upon selection
         panelData.html("");
 
+        // Add panel entries
         Object.entries(filtSamp).forEach(function([key, value]) {
             panelData.append("h4").text(`${key}: ${value}`);
         });
     });
 }
 
+// Create a function to build the bar, bubble, and gauge charts
 function plots(id) {
 
     d3.json("samples.json").then(sampleData => {
@@ -25,27 +31,35 @@ function plots(id) {
         var data = sampleData.samples;
         console.log(data);
 
+        // Filter the data by selected sample id
         var filtSamp = data.filter(sample => sample.id === id)[0];
         console.log(filtSamp);
-           
+
+            // Select the otu ids
             var ids = filtSamp.otu_ids;
             console.log(ids)
 
+            // Select the otu values
             var values = filtSamp.sample_values;
             console.log(values)
 
+            // Select the bacteria types
             var labels = filtSamp.otu_labels;
             console.log(labels)
 
+            // Select the top 10 otu's and reverse the order
             var otuTop10 = filtSamp.sample_values.slice(0,10).reverse();
             console.log(otuTop10)
 
+            // Select the otu labels
             var idTop10 = (filtSamp.otu_ids.slice(0,10)).map(d => "OTU " + d);
             console.log(idTop10)
 
+            // Select the bacteria names for the top 10
             var nameTop10 = filtSamp.otu_labels.slice(0,10);
             console.log(nameTop10)
 
+                // Create trace for horizontal bar chart
                 var trace1 = {
                     x: otuTop10,
                     y: idTop10,
@@ -62,8 +76,10 @@ function plots(id) {
                     yaxis: { title: "OTU"}                
                 };
 
+                // Plot the bar chart
                 Plotly.newPlot("bar", data, layout);
 
+                // Create trace for the bubble plot
                 var trace2 = {
                     x: ids,
                     y: values,
@@ -83,19 +99,24 @@ function plots(id) {
                     yaxis: { title: "Number of Microbes"}
                 };
 
+                // Plot the bubble plot
                 Plotly.newPlot("bubble", data2, layout2);
 
+                // Bring in the meta data
                 d3.json("samples.json").then(sampleData => {
         
                     var metaData = sampleData.metadata;
                     console.log(metaData);
             
+                    // Filter meta data with selected sample id
                     var filtSamp = metaData.filter(sample => sample.id.toString() === id)[0];
                     console.log(filtSamp);
 
+                    // Create a wash frequency variable for the gauge plot
                     var wash = filtSamp.wfreq;
                     console.log(wash);
 
+                    // Create trace for the gauge plot
                     var data3 = [
                         {
                           domain: { x: [0, 1], y: [0, 1] },
@@ -121,34 +142,42 @@ function plots(id) {
                         }
                       ];
                       
-                      var layout3 = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+                      var layout3 = { width: 450, height: 350, margin: { t: 0, b: 0 } };
+
+                    //   Plot the gauge plot
                       Plotly.newPlot('gauge', data3, layout3);
                 });
     });
 };
 
+// Create a function to initialize the page with starting charts
 function init() {
 
 var select = d3.select('#selDataset');
 
+    // populate the drop down selector with the sample id names
     d3.json("samples.json").then(data => {
         data.names.forEach(name => {
             select.append("option").text(name).property("value");
         });
 
+        // Call the plot and panel functions with the data from the first sample id
         plots(data.names[0]);
         panel(data.names[0]);
     });
 };
 
+// Get the value from the drop down selector and call for a change of charts based upon the value selected
 d3.select('#selDataset').on('change', updatePlotly);
 
+// Create a function to update the charts and panel
 function updatePlotly() {
     // Use D3 to select the dropdown menu
     var dropdownMenu = d3.select("#selDataset");
     // Assign the value of the dropdown menu option to a variable
     var id = dropdownMenu.property("value");
 
+    // Call plot and panel functions with selection
     plots(id);
     panel(id);
 };
