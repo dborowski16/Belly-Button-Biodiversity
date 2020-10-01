@@ -177,6 +177,7 @@ function updatePlotly() {
     // Assign the value of the dropdown menu option to a variable
     var id = dropdownMenu.property("value");
 
+    // Call plot and panel functions with selection
     plots(id);
     panel(id);
 };
